@@ -2,6 +2,7 @@ import { Button, Card, Form, Input, message } from 'antd'
 import './index.css'
 import { useEffect, useState } from 'react';
 import { list } from '../../interfaces';
+import { CreateBookModal } from './CreateBookModal';
 
 interface Book {
     id: number;
@@ -24,7 +25,7 @@ export function BookManage() {
                 setBookList(data.data);
             }
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
             message.error(e.response.data.message);
         }
@@ -38,7 +39,13 @@ export function BookManage() {
         setName(values.name);
     }
 
+    const [isCreateBookModalOpen, setCreateBookModalOpen] = useState(false)
+
     return <div id='bookManage'>
+        <CreateBookModal isOpen={isCreateBookModalOpen} handleClose={() => {
+            setCreateBookModalOpen(false);
+            setName('')
+        }}></CreateBookModal>
         <h1>图书管理系统</h1>
         <div className='content'>
             <div className='book-search'>
@@ -55,7 +62,9 @@ export function BookManage() {
                         <Button type='primary' htmlType='submit'>
                             搜索图书
                         </Button>
-                        <Button type='primary' htmlType='submit' style={{ background: 'green' }}>
+                        <Button type='primary' htmlType='submit' style={{ background: 'green' }} onClick={() => {
+                            setCreateBookModalOpen(true)
+                        }}>
                             新增图书
                         </Button>
                     </Form.Item>
