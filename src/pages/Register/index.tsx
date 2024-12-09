@@ -1,14 +1,31 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import './index.css'
+import { register } from "../../interfaces";
 
 interface RegisterUser {
     username: string;
     password: string;
-    password2: string
+    password2: string;
 }
 
-const onFinish = (values: RegisterUser) => {
-    console.log(values);
+const onFinish = async (values: RegisterUser) => {
+    if (values.password !== values.password2) {
+        message.error('两次密码不一致');
+        return;
+    }
+
+    try {
+        const res = await register(values.username, values.password);
+        if (res.status === 201 || res.status === 200) {
+            message.success('注册成功');
+            setTimeout(() => {
+                window.location.href = '/login'
+            }, 1000)
+        }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+        message.error(e.response.data.message)
+    }
 }
 
 const layout1 = {
@@ -21,10 +38,10 @@ const layout2 = {
     wrapperCol: { span: 24 }
 }
 
-export function Register(){
+export function Register() {
     return <div id='register-container'>
         <h1>图书管理系统</h1>
-        <Form 
+        <Form
             {...layout1}
             onFinish={onFinish}
             colon={false}
@@ -33,23 +50,23 @@ export function Register(){
             <Form.Item
                 label='用户名'
                 name='username'
-                rules={[{required: true, message: '请输入用户名！'}]}
+                rules={[{ required: true, message: '请输入用户名！' }]}
             >
-                <Input/>
+                <Input />
             </Form.Item>
             <Form.Item
                 label='密码'
                 name='password'
-                rules={[{required: true, message: '请输入密码！'}]}
+                rules={[{ required: true, message: '请输入密码！' }]}
             >
-                <Input.Password/>
+                <Input.Password />
             </Form.Item>
             <Form.Item
                 label='确认密码'
                 name='password2'
-                rules={[{required: true, message: '请输入确认密码！'}]}
+                rules={[{ required: true, message: '请输入确认密码！' }]}
             >
-                <Input.Password/>
+                <Input.Password />
             </Form.Item>
             <Form.Item
                 {...layout2}
