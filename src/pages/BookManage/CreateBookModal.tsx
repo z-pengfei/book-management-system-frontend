@@ -26,7 +26,7 @@ export interface CreateBook {
 export function CreateBookModal(props: CreateBookModalProps) {
     const [form] = useForm<CreateBook>();
 
-    const handleOk = async function() {
+    const handleOk = async function () {
         await form.validateFields();
 
         const values = form.getFieldsValue();
@@ -34,13 +34,13 @@ export function CreateBookModal(props: CreateBookModalProps) {
         try {
             const res = await create(values);
 
-            if(res.status === 201 || res.status === 200){
+            if (res.status === 201 || res.status === 200) {
                 message.success('创建成功');
                 form.resetFields();
                 props.handleClose()
             }
-        
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (e: any) {
             message.error(e.response.data.message);
         }
@@ -77,7 +77,7 @@ export function CreateBookModal(props: CreateBookModalProps) {
                 name="description"
                 rules={[{ required: true, message: '请输入图书描述!' }]}
             >
-                <TextArea/>
+                <TextArea />
             </Form.Item>
             <Form.Item
                 label="封面"
